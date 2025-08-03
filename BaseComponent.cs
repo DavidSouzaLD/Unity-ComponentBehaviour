@@ -6,19 +6,32 @@ using UnityEngine;
 /// It provides lifecycle methods and manages its association with a ComponentBehaviour.
 /// </summary>
 
-public abstract class BaseComponent : MonoBehaviour
+[DisallowMultipleComponent]
+public abstract class BaseComponent<TBehaviour> : MonoBehaviour
 {
     /// <summary>
     /// Stores the parent ComponentBehaviour that this BaseComponent is associated with.
     /// This is used to manage the component's lifecycle within the context of a ComponentBehaviour.
     /// </summary>
-    private ComponentBehaviour _context;
+    private TBehaviour _context;
 
     /// <summary>
     /// Gets the parent ComponentBehaviour that this BaseComponent is associated with.
     /// This property is used to access the context in which this component operates.
     /// </summary>
-    public ComponentBehaviour Context => _context;
+    public TBehaviour Context => _context;
+
+    /// <summary>
+    /// Stores the parent BaseComponent that this component is associated with.
+    /// This is used to manage the component's lifecycle within the context of a BaseComponent.
+    /// </summary>
+    private ComponentBehaviour<TBehaviour> _behaviour;
+
+    /// <summary>
+    /// Gets the parent ComponentBehaviour that this BaseComponent is associated with.
+    /// This property is used to access the context in which this component operates.
+    /// </summary>
+    public ComponentBehaviour<TBehaviour> Behaviour => _behaviour;
 
     /// <summary>
     /// Checks if this BaseComponent has a parent ComponentBehaviour.
@@ -37,7 +50,7 @@ public abstract class BaseComponent : MonoBehaviour
     /// Requires a specific type of component from the parent ComponentBehaviour.
     /// This method checks if the component exists and returns it if found.
     /// </summary>
-    protected T Require<T>() where T : BaseComponent
+    protected T Require<T>() where T : BaseComponent<TBehaviour>
     {
         if (_context == null)
         {
@@ -45,7 +58,7 @@ public abstract class BaseComponent : MonoBehaviour
             return null;
         }
 
-        if (_context.TryGetRequiredComponent(out T result))
+        if (_behaviour.TryGetRequiredComponent(out T result))
             return result;
 
         Debug.LogError($"{GetType().Name} require {typeof(T).Name}, but it was not found.");
@@ -96,12 +109,13 @@ public abstract class BaseComponent : MonoBehaviour
     {
         if (!HasComponentBehaviour)
         {
-            _context = GetComponentInParent<ComponentBehaviour>();
+            _context = GetComponentInParent<TBehaviour>();
+            _behaviour = _context as ComponentBehaviour<TBehaviour>;
         }
 
-        if (!_context.AddComponent(this))
+        if (!_behaviour.AddComponent(this))
         {
-            Debug.LogError($"Failed to add {name} to {nameof(ComponentBehaviour)}.");
+            Debug.LogError($"Failed to add {name} to {nameof(ComponentBehaviour<TBehaviour>)}.");
         }
     }
 
@@ -113,9 +127,9 @@ public abstract class BaseComponent : MonoBehaviour
     {
         if (HasComponentBehaviour)
         {
-            if (!_context.RemoveComponent(this))
+            if (!_behaviour.RemoveComponent(this))
             {
-                Debug.LogError($"Failed to remove {name} from {nameof(ComponentBehaviour)}.");
+                Debug.LogError($"Failed to remove {name} from {nameof(ComponentBehaviour<TBehaviour>)}.");
             }
         }
     }

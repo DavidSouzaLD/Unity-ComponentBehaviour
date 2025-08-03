@@ -7,21 +7,22 @@ using UnityEngine;
 /// It provides methods to add and remove components, and handles their lifecycle methods.
 /// </summary>
 
-public abstract class ComponentBehaviour : MonoBehaviour
+[DisallowMultipleComponent]
+public abstract class ComponentBehaviour<TBehaviour> : MonoBehaviour
 {
     /// <summary>
     /// Stores active components associated with this ComponentBehaviour.
     /// The key is the type of the component, and the value is the component instance.
     /// </summary>
-    private Dictionary<Type, BaseComponent> _activeComponents = new();
+    private Dictionary<Type, BaseComponent<TBehaviour>> _activeComponents = new();
 
     /// <summary>
     /// Adds a component to this ComponentBehaviour.
     /// This method is used to register components that derive from BaseComponent.
     /// </summary>
-    public bool AddComponent(BaseComponent component)
+    public bool AddComponent(BaseComponent<TBehaviour> component)
     {
-        _activeComponents ??= new Dictionary<Type, BaseComponent>();
+        _activeComponents ??= new Dictionary<Type, BaseComponent<TBehaviour>>();
 
         if (component == null || _activeComponents.ContainsKey(component.GetType()))
             return false;
@@ -34,7 +35,7 @@ public abstract class ComponentBehaviour : MonoBehaviour
     /// Removes a component from this ComponentBehaviour.
     /// This method is used to unregister components that derive from BaseComponent.
     /// </summary>
-    public bool RemoveComponent(BaseComponent component)
+    public bool RemoveComponent(BaseComponent<TBehaviour> component)
     {
         if (component == null || !_activeComponents.ContainsKey(component.GetType()))
             return false;
@@ -50,7 +51,7 @@ public abstract class ComponentBehaviour : MonoBehaviour
     /// <typeparam name="T"></typeparam>
     /// <param name="component"></param>
     /// <returns></returns>
-    public bool TryGetRequiredComponent<T>(out T component) where T : BaseComponent
+    public bool TryGetRequiredComponent<T>(out T component) where T : BaseComponent<TBehaviour>
     {
         if (_activeComponents.TryGetValue(typeof(T), out var value))
         {
@@ -91,7 +92,7 @@ public abstract class ComponentBehaviour : MonoBehaviour
     /// This is used to call lifecycle methods on each component.
     /// Note: Ensure that the action does not modify the collection while iterating.
     /// </summary>
-    private void RunComponents(Action<BaseComponent> action)
+    private void RunComponents(Action<BaseComponent<TBehaviour>> action)
     {
         foreach (var pair in _activeComponents)
         {
