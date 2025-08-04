@@ -1,10 +1,10 @@
 ---
 
-# ✨ Sistema de Componentes Modulares para Unity ✨
+# ✨ Modular Component System for Unity ✨
 
-Bem-vindo a um sistema de componentes flexível e poderoso para a Unity! Se você já se viu perdido em um mar de `MonoBehaviour` ou lutou contra o temido "código espaguete", este sistema pode ser o herói que você não sabia que precisava. 🦸‍♂️
+Welcome to a flexible and powerful component system for Unity! If you've ever found yourself lost in a sea of MonoBehavior or struggled with the dreaded "spaghetti code," this system might be the hero you didn't know you needed. 🦸‍♂️
 
-Ele foi projetado para transformar o caos em uma arquitetura limpa e organizada — pense em trocar espaguete por uma lasanha bem estruturada. 🍝 ->  lasagna
+It's designed to transform chaos into clean, organized architecture—think of swapping spaghetti for a well-structured lasagna. 🍝 -> lasagna
 
 ---
 
