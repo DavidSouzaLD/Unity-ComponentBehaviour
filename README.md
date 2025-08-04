@@ -8,7 +8,7 @@ It's designed to transform chaos into clean, organized architecture—think of s
 
 ---
 
-## 📜 Sumário
+## 📜 Summary
 
 *   [🇬🇧 English Documentation](#-english-documentation)
 *   [🇧🇷 Documentação em Português](#-documentação-em-português)
