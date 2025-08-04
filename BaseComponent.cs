@@ -134,3 +134,35 @@ public abstract class BaseComponent<TBehaviour> : MonoBehaviour
         }
     }
 }
+
+/// <summary>
+/// BaseComponent serves as a base class for components that can be added to a ComponentBehaviour.
+/// It provides lifecycle methods and manages its association with a ComponentBehaviour.
+/// </summary>
+/// <typeparam name="TBehaviour"></typeparam>
+/// <typeparam name="TData"></typeparam>
+
+[DisallowMultipleComponent]
+public abstract class BaseComponent<TBehaviour, TData> : BaseComponent<TBehaviour> where TData : ScriptableObject
+{
+    /// <summary>
+    /// Stores the data associated with this BaseComponent.
+    /// This is used to manage the component's data within the context of a ComponentBehaviour.
+    /// </summary>
+    [SerializeField]
+    protected TData data;
+
+    /// <summary>
+    /// Sets the data for this BaseComponent.
+    /// This method is used to initialize or update the data associated with this component.
+    /// </summary>
+    /// <param name="data"></param>
+    public void SetData(TData data) => this.data = data;
+
+    /// <summary>
+    /// Gets the data associated with this BaseComponent.
+    /// This method is used to retrieve the data that this component operates on.
+    /// </summary>
+    /// <returns></returns>
+    public TData Data() => data;
+}
