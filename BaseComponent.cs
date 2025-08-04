@@ -164,5 +164,5 @@ public abstract class BaseComponent<TBehaviour, TData> : BaseComponent<TBehaviou
     /// This method is used to retrieve the data that this component operates on.
     /// </summary>
     /// <returns></returns>
-    public TData Data() => data;
+    public TData GetData() => data;
 }
